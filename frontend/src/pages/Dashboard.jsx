@@ -26,17 +26,15 @@ function Dashboard() {
     const novoStatus = statusAtual === "Liberado" ? "Bloqueado" : "Liberado";
     setAlterandoLote(lote);
 
-    const resposta = await fetch(
-      `http://localhost:5000/api/materiais/${lote}/status`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify({ status: novoStatus }),
-      }
-    );
+    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/api/materiais/${lote}/status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify({ status: novoStatus }),
+    });
+
 
     if (resposta.ok) {
       setMateriais((prev) =>
