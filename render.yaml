@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: gqtrack
-    env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn backend.app:app"
-    pythonVersion: 3.11.9
-    region: oregon
-    plan: free
