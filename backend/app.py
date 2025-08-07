@@ -10,7 +10,12 @@ import jwt
 
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173", "https://gqtrack.vercel.app"], supports_credentials=True)
+CORS(app, origins=[
+    "http://localhost:5173",
+    "https://gqtrack.vercel.app",
+    "https://gqtrack-lnxjui2j1-lucas-projects-e243ea2c.vercel.app"  # <--- esse também
+], supports_credentials=True)
+
 
 
 
