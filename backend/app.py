@@ -10,7 +10,8 @@ import jwt
 
 
 app = Flask(__name__)
-CORS(app, origins="http://localhost:5173", supports_credentials=True)
+CORS(app, origins=["http://localhost:5173", "https://gqtrack.vercel.app"], supports_credentials=True)
+
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
