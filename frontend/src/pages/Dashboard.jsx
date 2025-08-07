@@ -12,7 +12,7 @@ function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/materiais", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/materiais`, {
       headers: {
         Authorization: "Bearer " + token,
       },
