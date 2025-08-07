@@ -6,7 +6,8 @@ function TrilhaAuditoria() {
   const [registros, setRegistros] = useState([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/materiais`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/trilha`, {
+
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token"),
       },
