@@ -13,8 +13,10 @@ app = Flask(__name__)
 CORS(app, origins=[
     "http://localhost:5173",
     "https://gqtrack.vercel.app",
-    "https://gqtrack-lnxjui2j1-lucas-projects-e243ea2c.vercel.app"  # <--- esse também
+    "https://gqtrack-lnxjui2j1-lucas-projects-e243ea2c.vercel.app",
+    "https://gqtrack-vk8rvkazn-lucas-projects-e243ea2c.vercel.app"  # ✅ esse que está dando erro
 ], supports_credentials=True)
+
 
 
 
