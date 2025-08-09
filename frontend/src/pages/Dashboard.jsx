@@ -10,17 +10,19 @@ function Dashboard() {
   const [alterandoLote, setAlterandoLote] = useState(null);
   const [busca, setBusca] = useState("");
 
-  useEffect(() => {
+  const carregarMateriais = async () => {
     const token = localStorage.getItem("token");
-    fetch(`${import.meta.env.VITE_API_URL}/api/materiais`, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setMateriais(data))
-      .catch((err) => console.error("Erro ao carregar materiais:", err));
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/materiais`, {
+      headers: { Authorization: "Bearer " + token },
+    });
+    const data = await res.json();
+    setMateriais(data);
+  };
+
+  useEffect(() => {
+    carregarMateriais();
   }, []);
+
 
   const alterarStatus = async (lote, statusAtual) => {
     const novoStatus = statusAtual === "Liberado" ? "Bloqueado" : "Liberado";
@@ -37,14 +39,11 @@ function Dashboard() {
 
 
     if (resposta.ok) {
-      setMateriais((prev) =>
-        prev.map((m) =>
-          m.lote === lote ? { ...m, status: novoStatus } : m
-        )
-      );
+      await carregarMateriais(); // força recarregar do backend
     } else {
       alert("Erro ao atualizar status.");
     }
+
 
     setTimeout(() => setAlterandoLote(null), 600);
   };
