@@ -191,7 +191,8 @@ def listar_materiais():
     if usuario in ["expirado", "inválido"]:
         return jsonify({"error": "Não autorizado"}), 401
 
-    materiais = MaterialEstoque.query.all()
+    registros = MaterialEstoque.query.order_by(MaterialEstoque.codigo.asc()).all()
+
     ...
 
 
