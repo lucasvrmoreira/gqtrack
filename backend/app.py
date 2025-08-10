@@ -127,21 +127,7 @@ def logout():
 
 
 # Rota para retornar materiais
-@app.route('/api/materiais')
-def get_materiais():
-    try:
-        registros = MaterialEstoque.query.all()
-        return jsonify([
-            {
-                "codigo": r.codigo,
-                "descricao": r.descricao,
-                "lote": r.lote,
-                "status": r.status,
-                "validade": r.validade.strftime('%Y-%m-%d')
-            } for r in registros
-        ])
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/materiais/<lote>/status', methods=['PUT'])
 def atualizar_status(lote):
@@ -167,13 +153,40 @@ def atualizar_status(lote):
     return jsonify({"success": True, "message": "Status atualizado com sucesso"})
 
 
-@app.route("/api/trilha")
+# Rota para retornar materiais (ordenados por codigo)
+@app.route('/api/materiais', methods=['GET'])
+def get_materiais():
+    usuario = get_usuario_logado()
+    if usuario in ["expirado", "inválido"]:
+        return jsonify({"error": "Não autorizado"}), 401
+
+    try:
+        registros = (
+            MaterialEstoque.query
+            .order_by(MaterialEstoque.codigo.asc())  # <- ORDEM ALFABÉTICA PELO CÓDIGO
+            .all()
+        )
+        return jsonify([
+            {
+                "codigo": r.codigo,
+                "descricao": r.descricao,
+                "lote": r.lote,
+                "status": r.status,
+                "validade": r.validade.strftime('%Y-%m-%d')
+            } for r in registros
+        ])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# Rota da trilha (corrigida para consultar a tabela certa)
+@app.route("/api/trilha", methods=['GET'])
 def trilha():
     usuario = get_usuario_logado()
     if usuario in ["expirado", "inválido"]:
         return jsonify({"error": "Não autorizado"}), 401
 
-    registros = MaterialEstoque.query.order_by(MaterialEstoque.codigo.asc()).all()
+    logs = TrilhaAuditoria.query.order_by(TrilhaAuditoria.timestamp.desc()).all()
     return jsonify([
         {
             "usuario": r.usuario,
@@ -181,19 +194,9 @@ def trilha():
             "detalhes": r.detalhes,
             "timestamp": r.timestamp.isoformat()
         }
-        for r in registros
+        for r in logs
     ])
 
-
-@app.route("/api/materiais")
-def listar_materiais():
-    usuario = get_usuario_logado()
-    if usuario in ["expirado", "inválido"]:
-        return jsonify({"error": "Não autorizado"}), 401
-
-    registros = MaterialEstoque.query.order_by(MaterialEstoque.codigo.asc()).all()
-
-    ...
 
 
 if __name__ == '__main__':
