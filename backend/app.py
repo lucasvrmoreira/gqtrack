@@ -173,7 +173,7 @@ def trilha():
     if usuario in ["expirado", "inválido"]:
         return jsonify({"error": "Não autorizado"}), 401
 
-    registros = TrilhaAuditoria.query.order_by(TrilhaAuditoria.timestamp.desc()).all()
+    registros = MaterialEstoque.query.order_by(MaterialEstoque.codigo.asc()).all()
     return jsonify([
         {
             "usuario": r.usuario,
