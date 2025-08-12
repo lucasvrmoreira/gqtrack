@@ -28,12 +28,9 @@ Conexão direta com SAP (via API ou ODBC).
 
 Preparado para integração com outros ERPs.
 
-✅ Benefícios
-🔹 Eliminação do retrabalho com etiquetas manuais.
+Agilidade e padronização na mudança de status.
 
-🔹 Agilidade e padronização na mudança de status.
-
-🔹 Conformidade regulatória: acesso imediato ao CoA e informaçôes do lote via QR Code.
+Conformidade regulatória: acesso imediato ao CoA e informaçôes do lote via QR Code.
 
 🛠 Stacks Técnicas
 Backend
