@@ -1,34 +1,90 @@
-🎯 Finalidade
+🎯 GQ Track
+Finalidade
+Eu desenvolvi o GQ Track visando resolver um problema interno na empresa onde trabalho.
+Atualmente, quando um material é aprovado pela Garantia da Qualidade (GQ), a equipe precisa colar manualmente etiquetas de “LIBERADO” em cada item do lote — um processo repetitivo, demorado e sujeito a erros.
 
+Com o GQ Track, substituímos esse processo manual por um QR Code único para cada lote.
+Quando o operador bipa o QR Code, o sistema consulta automaticamente o banco de dados do SAP, recuperando todas as informações do material e anexando o Certificado de Análise (CoA).
+Assim, eliminamos a necessidade de etiquetas físicas individuais e garantimos mais agilidade, padronização e rastreabilidade.
 
-O GQ Track é uma solução desenvolvida para automatizar o sistema de etiquetagem em ambientes farmacêuticos, eliminando processos manuais e garantindo maior eficiência e rastreabilidade.
+🚀 Como Funciona
+Garantia da Qualidade
 
-Tradicionalmente, a equipe de Garantia da Qualidade (GQ) precisa aplicar manualmente etiquetas de “LIBERADO” em cada material após a aprovação. Com o GQ Track, cada lote é identificado por um QR Code que armazena tanto as informações do produto quanto o Certificado de Análise (CoA).
+Altera o status do material com 1 clique (Em análise → Liberado → Bloqueado).
 
-A operação é simples e eficiente:
+Produção
 
-Garantia da Qualidade: acessa a aplicação e altera o status do material com apenas um clique (por exemplo: Em análise → Liberado → Bloqueado).
+Escaneia o QR Code na linha de produção.
 
-Produção: realiza a leitura do QR Code na linha; o sistema automaticamente recupera e vincula o CoA e todos os dados do lote.
+O sistema recupera e vincula automaticamente o CoA e os dados do lote.
 
-O sistema oferece rastreabilidade completa, com trilha de auditoria e integração direta com o SAP (via API ou ODBC), além de estar preparado para integração com outros ERPs.
+Rastreabilidade
+
+Tudo é registrado na trilha de auditoria, com informações sobre quem, quando e o que foi alterado.
+
+Integração
+
+Conexão direta com SAP (via API ou ODBC).
+
+Preparado para integração com outros ERPs.
 
 🔁 Fluxo Operacional
-
-
-Recebimento do material → Registro do lote e geração do QR Code.
-
-Análise pela Garantia da Qualidade → Alteração do status para LIBERADO com um clique.
-
-Chão de fábrica → Operador escaneia o QR Code; o sistema vincula e recupera automaticamente o CoA e os dados do lote.
-
-Rastreabilidade → Registro em auditoria com informações sobre quem realizou a ação, quando e o que foi alterado.
-
+A[📦 Recebimento do material] --> B[📝 Registro do lote + QR Code]
+B --> C[🔍 Análise pela GQ]
+C --> D[✅ Alteração para LIBERADO]
+D --> E[🏭 Chão de fábrica escaneia QR Code]
+E --> F[📑 CoA e dados vinculados automaticamente]
+F --> G[🗂 Registro completo na trilha de auditoria]
 ✅ Benefícios
+🔹 Eliminação do retrabalho com etiquetas manuais.
 
-Eliminação do retrabalho com etiquetas manuais.
+🔹 Agilidade e padronização na mudança de status.
 
-Agilidade e padronização: alteração de status em um clique.
+🔹 Conformidade regulatória: acesso imediato ao CoA e informaçôes do lote via QR Code.
 
-Conformidade regulatória: acesso imediato ao CoA e histórico via QR Code.
+🛠 Stacks Técnicas
+Backend
+Python 3.12
+
+FAST API
+
+ DB - PostgreSQL 
+
+SQLAlchemy (ORM)
+
+ODBC (integração com SAP)
+
+JWT (JSON Web Token para autenticação)
+
+Flask-CORS (cross-origin requests)
+
+dotenv (variáveis de ambiente)
+
+Frontend
+React + Vite
+
+TailwindCSS 3.3
+
+Framer Motion (animações)
+
+Axios (requisições API)
+
+React Router DOM (rotas)
+
+🔒 Segurança
+Autenticação JWT (controle de acesso)
+
+Hash de senha com bcrypt
+
+Proteção contra SQL Injection (via ORM)
+
+.env para variáveis sensíveis
+
+CORS restritivo
+
+Validação de entrada no backend (Flask)
+
+HTTPS (produção)
+
+Trilha de auditoria (alterações e logins)
 
