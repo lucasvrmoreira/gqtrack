@@ -28,13 +28,6 @@ Conexão direta com SAP (via API ou ODBC).
 
 Preparado para integração com outros ERPs.
 
-🔁 Fluxo Operacional
-A[📦 Recebimento do material] --> B[📝 Registro do lote + QR Code]
-B --> C[🔍 Análise pela GQ]
-C --> D[✅ Alteração para LIBERADO]
-D --> E[🏭 Chão de fábrica escaneia QR Code]
-E --> F[📑 CoA e dados vinculados automaticamente]
-F --> G[🗂 Registro completo na trilha de auditoria]
 ✅ Benefícios
 🔹 Eliminação do retrabalho com etiquetas manuais.
 
