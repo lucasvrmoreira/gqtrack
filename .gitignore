@@ -7,20 +7,37 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependências Node.js
+node_modules/
+dist/
+dist-ssr/
 *.local
 
-# Editor directories and files
+# Dependências Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Arquivos de ambiente
+.env
+**/.env
+
+# Banco de dados local
+*.db
+
+# Arquivos de IDEs/editores
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-*.db
-__pycache__/
+
+# Outros
+*.lock
