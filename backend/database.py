@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from config import SQLALCHEMY_DATABASE_URI, DB_SCHEMA  # << sem 'backend.'
+from backend.config import SQLALCHEMY_DATABASE_URI, DB_SCHEMA
+
 
 # Metadata com schema padrão
 metadata = MetaData(schema=DB_SCHEMA)

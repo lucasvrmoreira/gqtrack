@@ -28,25 +28,40 @@ function Dashboard() {
     const novoStatus = statusAtual === "Liberado" ? "Bloqueado" : "Liberado";
     setAlterandoLote(lote);
 
-    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/api/materiais/${lote}/status`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-      body: JSON.stringify({ status: novoStatus }),
-    });
+    try {
+      const token = localStorage.getItem("token");
+      const api = import.meta.env.VITE_API_URL;
 
+      // 🔹 Remove apóstrofos e caracteres inválidos
+      const loteLimpo = String(lote).trim().replace(/['"]/g, "");
+      const url = `${api}/api/materiais/${encodeURIComponent(loteLimpo)}/status`;
 
-    if (resposta.ok) {
-      await carregarMateriais(); // força recarregar do backend
-    } else {
-      alert("Erro ao atualizar status.");
+      const resposta = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: novoStatus }),
+      });
+
+      if (resposta.ok) {
+        await carregarMateriais();
+      } else {
+        const texto = await resposta.text();
+        console.error("Erro backend:", texto);
+        alert("Erro ao atualizar status: " + texto);
+      }
+    } catch (err) {
+      console.error("Erro ao fazer fetch:", err);
+      alert("Falha de comunicação com o servidor.");
+    } finally {
+      setTimeout(() => setAlterandoLote(null), 600);
     }
-
-
-    setTimeout(() => setAlterandoLote(null), 600);
   };
+
+
+
 
   const materiaisFiltrados = materiais.filter((mat) =>
     (mat.codigo + mat.descricao + mat.lote)

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, DateTime, Text
-from database import Base
+from backend.database import Base
 from werkzeug.security import check_password_hash
 from datetime import datetime
 

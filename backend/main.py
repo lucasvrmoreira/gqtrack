@@ -1,14 +1,20 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from sqlalchemy import text
-from database import get_db, Base, engine
-from models import Usuario, MaterialEstoque, TrilhaAuditoria
-from auth import create_access_token, verify_token, get_current_user
+from sqlalchemy import Engine, text
+from backend.database import get_db, Base, engine
+from backend.models import Usuario, MaterialEstoque, TrilhaAuditoria
+from backend.auth import create_access_token, verify_token, get_current_user
 from pydantic import BaseModel
 from datetime import datetime
+from fastapi import FastAPI, Depends, HTTPException, status, Request
+from jose import jwt, JWTError
+from sqlalchemy.orm import Session
+from backend.database import get_db
+from backend.models import MaterialEstoque, TrilhaAuditoria
+from backend.config import SECRET_KEY, ALGORITHM
+from backend.auth import oauth2_scheme
 
-# 🔹 Cria as tabelas automaticamente
 Base.metadata.create_all(bind=engine, checkfirst=True)
 
 app = FastAPI(title="GQTrack Backend", version="1.0.0")
@@ -54,27 +60,47 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     return {"token": token, "role": user.role}
 
 
-@app.put("/api/materiais/{lote}/status")
-def atualizar_status(lote: str, body: StatusUpdate, token: dict = Depends(get_current_user), db: Session = Depends(get_db)):
-    usuario = token.get("usuario")
-    role = token.get("role")
+@app.put("/api/materiais/{codigo}/status")
+def atualizar_status(codigo: str, request: Request, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    try:
+        # Decodifica o token
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        usuario = payload.get("usuario")
 
-    if role != "admin":
-        raise HTTPException(status_code=403, detail="Apenas administradores podem alterar status.")
+        if usuario is None:
+            raise HTTPException(status_code=401, detail="Token inválido")
 
-    material = db.query(MaterialEstoque).filter(MaterialEstoque.lote == lote).first()
-    if not material:
-        raise HTTPException(status_code=404, detail="Material não encontrado")
+        dados = request.json()
+        novo_status = dados.get("status")
 
-    material.status = body.status
-    log = TrilhaAuditoria(
-        usuario=usuario,
-        acao=f"Alterou status para {body.status}",
-        detalhes=f"Lote {material.lote} - {material.descricao}"
-    )
-    db.add(log)
-    db.commit()
-    return {"success": True, "message": "Status atualizado com sucesso"}
+        if not novo_status:
+            raise HTTPException(status_code=400, detail="Status não informado")
+
+        # Busca o material
+        material = db.query(MaterialEstoque).filter(MaterialEstoque.codigo == codigo).first()
+        if not material:
+            raise HTTPException(status_code=404, detail=f"Material {codigo} não encontrado")
+
+        # Atualiza o status
+        material.status = novo_status
+        db.add(material)
+        db.commit()
+
+        # Cria trilha de auditoria
+        trilha = TrilhaAuditoria(
+            usuario=usuario,
+            acao=f"Alterou status do material {codigo} para {novo_status}",
+        )
+        db.add(trilha)
+        db.commit()
+
+        return {"mensagem": f"Status do material {codigo} atualizado para {novo_status}"}
+
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token inválido ou expirado")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro interno: {e}")
+
 
 
 @app.get("/api/materiais")
