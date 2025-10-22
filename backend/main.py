@@ -2,13 +2,13 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from backend.database import get_db, Base, engine
-from backend.models import Usuario, MaterialEstoque, TrilhaAuditoria
-from backend.auth import create_access_token, verify_token, get_current_user
+from database import get_db, Base, engine
+from models import Usuario, MaterialEstoque, TrilhaAuditoria
+from auth import create_access_token, verify_token, get_current_user
 from pydantic import BaseModel
 from datetime import datetime
 
-# 🔹 Cria as tabelas automaticamente (schema já configurado no database.py)
+# 🔹 Cria as tabelas automaticamente
 Base.metadata.create_all(bind=engine, checkfirst=True)
 
 app = FastAPI(title="GQTrack Backend", version="1.0.0")
@@ -105,4 +105,4 @@ def trilha(token: dict = Depends(get_current_user), db: Session = Depends(get_db
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.main:app", host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)

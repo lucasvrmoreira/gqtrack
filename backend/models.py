@@ -8,7 +8,8 @@ class Usuario(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(100), unique=True, nullable=False)
-    password = Column(String(100), nullable=False)
+    password = Column(String(255), nullable=False)
+    role = Column(String(50), nullable=False, default="producao")
 
     def check_password(self, senha: str) -> bool:
         return check_password_hash(self.password, senha)
